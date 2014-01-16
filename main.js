@@ -42,15 +42,17 @@ module.exports = Thumbnail;
  *                       parameter. The third parameter a boolean if the thumb has
  *                       just created or not.
  */
-Thumbnail.prototype.ensureThumbnail = function ensureThumbnail(filename, width, height, cb) {
+Thumbnail.prototype.ensureThumbnail = function ensureThumbnail(filename, width, height, quality, cb) {
   if (!filename) { throw new Error('provide filename'); }
   if (!width) { throw new Error('provide width'); }
   if (!height) { throw new Error('provide height'); }
+  if (!quality) { throw new Error('provide quality'); }
   if (!cb) { throw new Error('provide cb'); }
 
   if (typeof filename !== 'string') { throw new TypeError('filename must be a string'); }
   if (typeof width !== 'number') { throw new TypeError('width must be a number'); }
   if (typeof height !== 'number') { throw new TypeError('height must be a number'); }
+  if (typeof quality !== 'number') { throw new TypeError('quality must be a number'); }
   if (typeof cb !== 'function') { throw new TypeError('cb must be a function'); }
 
   if (filename !== path.basename(filename)) { throw new Error('filename contains a path'); }
@@ -75,6 +77,7 @@ Thumbnail.prototype.ensureThumbnail = function ensureThumbnail(filename, width, 
       var args = [
         'convert',
         '-size', wxh,
+        '-quality', quality,
         that.rootOriginals+'/'+filename,
         '-thumbnail', wxh+'^',
         '-gravity', 'center',
